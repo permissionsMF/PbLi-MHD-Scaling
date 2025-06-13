@@ -37,3 +37,55 @@ def characteristic_length_from_Re_ratio(B, sigma, rho, nu, U, ha2_over_re):
     ha = hartmann_number(B, L_ha, sigma, rho, nu)
     re = ha**2 / ha2_over_re
     return re * nu / U
+
+
+# New inverse relationships -------------------------------------------------
+
+def velocity_from_lengths(L_ha, L_re, B, sigma, rho, nu, ha2_over_re):
+    """Flow velocity that satisfies ``Ha^2/Re`` for given lengths.
+
+    Parameters
+    ----------
+    L_ha : ndarray or float
+        Characteristic length derived from the Hartmann relation [m].
+    L_re : ndarray or float
+        Characteristic length associated with the Reynolds number [m].
+    B : float
+        Magnetic field strength in Tesla.
+    sigma, rho, nu : float
+        Material properties at the operating temperature.
+    ha2_over_re : float
+        Target ``Ha^2/Re`` interaction parameter.
+
+    Returns
+    -------
+    ndarray or float
+        Velocity ``U`` [m/s].
+    """
+    ha = hartmann_number(B, L_ha, sigma, rho, nu)
+    re = ha**2 / ha2_over_re
+    return re * nu / L_re
+
+
+def heat_flux_from_length(L_gr, B, sigma, rho, nu, g, beta, k, gr_over_ha2):
+    """Surface heat flux that satisfies ``Gr/Ha^2`` for a given ``L_Gr``.
+
+    Parameters
+    ----------
+    L_gr : ndarray or float
+        Characteristic length from the Grashof relation [m].
+    B : float
+        Magnetic field strength in Tesla.
+    sigma, rho, nu, g, beta, k : float
+        Material properties and gravitational acceleration.
+    gr_over_ha2 : float
+        Target ``Gr/Ha^2`` interaction parameter.
+
+    Returns
+    -------
+    ndarray or float
+        Heat flux ``q''`` [W/m^2].
+    """
+    num = gr_over_ha2 * k * nu * B**2 * sigma
+    den = g * beta * rho * L_gr**2
+    return num / den

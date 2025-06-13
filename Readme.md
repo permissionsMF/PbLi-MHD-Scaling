@@ -12,7 +12,7 @@ We use dimensionless interaction parameters from the DEMO reference design:
 - Magnetic field \( B = 4 \, \text{T} \)
 - Surface heat flux \( q'' = 0.1 \rightarrow 1.0 \, \text{MW/m²} \)
 - Flow velocity ( U = 1e-4 -> 5e-3 m/s )
-- Constant operating temperature of **330°C**
+  - Constant operating temperature of **330°C**
 - Temperature-dependent material properties for:
   - PbLi alloy (density, viscosity, conductivity, thermal conductivity, expansion coefficient)
   - SS316L structure (used for comparison)
@@ -27,6 +27,8 @@ We use dimensionless interaction parameters from the DEMO reference design:
 - Generate 3D plots:
   - \( L(Ha) \) vs \( L(Re) \) vs flow velocity \( U \)
   - \( L(Ha) \) vs \( L(Gr) \) vs heat flux \( q'' \)
+  - Sweep ``L`` values directly to compute the required
+    heat flux or velocity for the target interaction parameters
 
 ## Usage
 
