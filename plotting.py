@@ -57,3 +57,31 @@ def plot_Lha_Lre_u(L_ha, L_re, u_values, title="L_Ha vs L_Re vs velocity"):
     ax.set_title(title)
     fig.colorbar(surf, shrink=0.5, aspect=5)
     return fig, ax
+
+def plot_length_match(U, q, L, diff, threshold=1e-3, title="Characteristic length match"):
+    """Contour plot of characteristic length with match indication.
+
+    Parameters
+    ----------
+    U : ndarray
+        2D grid of flow velocity values in m/s.
+    q : ndarray
+        2D grid of surface heat flux values in MW/m^2.
+    L : ndarray
+        2D grid of averaged characteristic lengths [m].
+    diff : ndarray
+        2D grid of ``L_Ha - L_Gr`` differences.
+    threshold : float, optional
+        Contour level used to highlight where ``|L_Ha - L_Gr|`` is small.
+    title : str, optional
+        Plot title.
+    """
+    fig, ax = plt.subplots()
+    cf = ax.contourf(U, q, L, cmap="viridis")
+    cbar = fig.colorbar(cf, ax=ax)
+    cbar.set_label("L [m]")
+    ax.contour(U, q, np.abs(diff), levels=[threshold], colors="r")
+    ax.set_xlabel("U [m/s]")
+    ax.set_ylabel("q'' [MW/m^2]")
+    ax.set_title(title)
+    return fig, ax
