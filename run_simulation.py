@@ -12,10 +12,10 @@ GR_OVER_HA2 = 0.624
 B = 4.0  # Tesla (constant)
 G = 9.81  # m/s^2
 
-# Heat fluxes and velocities
-q_values_MW = np.linspace(0.1, 1.0, 10)
-q_values = q_values_MW * 1e6
-U_vals = np.logspace(np.log10(1e-4), np.log10(5e-3), 20)
+# Sweep ranges for characteristic lengths (in mm)
+L_HA_MM = np.linspace(1.0, 10.0, 20)
+L_GR_MM = np.linspace(1.0, 10.0, 20)
+L_RE_MM = np.linspace(1.0, 10.0, 20)
 
 
 def main() -> None:
@@ -28,25 +28,24 @@ def main() -> None:
     k = props.k(T)
     beta = props.beta(T)
 
-    # Characteristic lengths for each velocity and heat flux
-    L_ha_vals = np.array(
-        [mhd.characteristic_length_from_Ha_ratio(B, sigma, rho, U, HA2_OVER_RE) for U in U_vals]
-    )
-    L_re_vals = np.array(
-        [mhd.characteristic_length_from_Re_ratio(B, sigma, rho, nu, U, HA2_OVER_RE) for U in U_vals]
-    )
-    L_gr_vals = np.array(
-        [mhd.characteristic_length_from_Gr_ratio(B, sigma, rho, nu, G, beta, q, k, GR_OVER_HA2) for q in q_values]
-    )
+    L_ha = L_HA_MM / 1e3
+    L_gr = L_GR_MM / 1e3
+    L_re = L_RE_MM / 1e3
 
-    # Convert to millimetres for plotting convenience
-    L_ha_mm = 1e3 * L_ha_vals
-    L_re_mm = 1e3 * L_re_vals
-    L_gr_mm = 1e3 * L_gr_vals
+    L_ha_mm = L_HA_MM
+    L_gr_mm = L_GR_MM
+    L_re_mm = L_RE_MM
 
-    # Build grids for plotting helpers
-    q_grid = np.tile(q_values_MW[:, None], (1, len(L_ha_mm)))
-    u_grid = np.tile(U_vals[:, None], (1, len(L_ha_mm)))
+    # Compute q'' and U for each length combination
+    LHA_grid, LGR_grid = np.meshgrid(L_ha, L_gr, indexing="xy")
+    q_grid = mhd.heat_flux_from_length(
+        LGR_grid, B, sigma, rho, nu, G, beta, k, GR_OVER_HA2
+    ) / 1e6  # convert to MW/m^2
+
+    LHA_grid_U, LRE_grid_U = np.meshgrid(L_ha, L_re, indexing="xy")
+    u_grid = mhd.velocity_from_lengths(
+        LHA_grid_U, LRE_grid_U, B, sigma, rho, nu, HA2_OVER_RE
+    )
 
     fig1, _ = plotting.plot_Lha_Lgr_q(
         L_ha_mm,
