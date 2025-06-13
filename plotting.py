@@ -4,11 +4,24 @@ import numpy as np
 
 
 def plot_Lha_Lgr_q(L_ha, L_gr, q_values, title="L_Ha vs L_Gr vs heat flux"):
-    """3D surface plot of L_Ha vs L_Gr vs heat flux."""
+    """3D surface plot of L_Ha vs L_Gr vs heat flux.
+
+    The function accepts either 1D vectors for ``L_ha`` and ``L_gr`` or full 2D
+    grids. When vectors are provided a mesh grid is created internally.  If the
+    inputs are already 2D and share the same shape as ``q_values`` they are used
+    directly.  This prevents broadcasting errors when the caller has already
+    generated the grids.
+    """
+
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
 
-    X, Y = np.meshgrid(L_ha, L_gr)
+    if L_ha.ndim == 1 and L_gr.ndim == 1:
+        X, Y = np.meshgrid(L_ha, L_gr)
+    else:
+        # assume arrays are already shaped correctly
+        X, Y = L_ha, L_gr
+
     Z = q_values
 
     surf = ax.plot_surface(X, Y, Z, cmap="viridis", alpha=0.8)
@@ -21,11 +34,20 @@ def plot_Lha_Lgr_q(L_ha, L_gr, q_values, title="L_Ha vs L_Gr vs heat flux"):
 
 
 def plot_Lha_Lre_u(L_ha, L_re, u_values, title="L_Ha vs L_Re vs velocity"):
-    """3D surface plot of L_Ha vs L_Re vs velocity."""
+    """3D surface plot of L_Ha vs L_Re vs velocity.
+
+    Similar to :func:`plot_Lha_Lgr_q`, this helper accepts either vector inputs
+    or precomputed grids to provide greater flexibility.
+    """
+
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
 
-    X, Y = np.meshgrid(L_ha, L_re)
+    if L_ha.ndim == 1 and L_re.ndim == 1:
+        X, Y = np.meshgrid(L_ha, L_re)
+    else:
+        X, Y = L_ha, L_re
+
     Z = u_values
 
     surf = ax.plot_surface(X, Y, Z, cmap="plasma", alpha=0.8)
