@@ -8,10 +8,11 @@ We use dimensionless interaction parameters from the DEMO reference design:
 
 ## Objective
 
-Calculate the characteristic length scales \( L \) for MHD similarity under constrained test conditions:
+- Calculate the characteristic length scales \( L \) for MHD similarity under constrained test conditions:
 - Magnetic field \( B = 4 \, \text{T} \)
 - Surface heat flux \( q'' = 0.1 \rightarrow 1.0 \, \text{MW/m²} \)
 - Flow velocity ( U = 1e-4 -> 5e-3 m/s )
+- Constant operating temperature of **330°C**
 - Temperature-dependent material properties for:
   - PbLi alloy (density, viscosity, conductivity, thermal conductivity, expansion coefficient)
   - SS316L structure (used for comparison)

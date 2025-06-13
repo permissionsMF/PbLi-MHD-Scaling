@@ -29,3 +29,11 @@ def characteristic_length_from_Gr_ratio(B, sigma, rho, nu, g, beta, q, k, gr_ove
     num = gr_over_ha2 * k * nu * B**2 * sigma
     den = g * beta * q * rho
     return np.sqrt(num / den)
+
+
+def characteristic_length_from_Re_ratio(B, sigma, rho, nu, U, ha2_over_re):
+    """L from Ha^2/Re ratio using the implied Reynolds number."""
+    L_ha = characteristic_length_from_Ha_ratio(B, sigma, rho, U, ha2_over_re)
+    ha = hartmann_number(B, L_ha, sigma, rho, nu)
+    re = ha**2 / ha2_over_re
+    return re * nu / U
