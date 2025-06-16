@@ -19,6 +19,26 @@ def grashof_number(g, beta, q, L, k, nu):
 
 # Characteristic length calculations
 
+def length_from_grashof(Gr, g, beta, q_flux, k, nu):
+    """
+    Calculate characteristic length L [m] from Grashof number based on surface heat flux.
+
+    Parameters:
+        Gr (float): Target Grashof number [dimensionless]
+        g (float): Gravitational acceleration [m/s²]
+        beta (float): Thermal expansion coefficient [1/K]
+        q_flux (float): Applied surface heat flux [W/m²]
+        k (float): Thermal conductivity [W/m·K]
+        nu (float): Kinematic viscosity [m²/s]
+
+    Returns:
+        float: Characteristic length L [m]
+    """
+    numerator = Gr * k * nu**2
+    denominator = g * beta * q_flux
+    return (numerator / denominator) ** 0.25
+
+
 def characteristic_length_from_Ha_ratio(B, sigma, rho, U, ha2_over_re):
     """L from Ha^2/Re ratio."""
     return ha2_over_re * rho * U / (B**2 * sigma)

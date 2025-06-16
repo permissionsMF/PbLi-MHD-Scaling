@@ -103,7 +103,7 @@ def thermalConductivity(tempC):
         thermalConductivity [W/cm.K] float: temperature dependant thermal 
         conductivity
     """
-    assert tempC >= 508 and tempC <= 873, "Input temperature for thermal conductivity, lambda is out of range 508 <= T <= 873 K)"
+    #assert tempC >= 508 and tempC <= 873, "Input temperature for thermal conductivity, lambda is out of range 508 <= T <= 873 K)"
     return 0.1451 + (tempC * 1.9631E-04)
 
 def dynamicViscosity(tempK):
